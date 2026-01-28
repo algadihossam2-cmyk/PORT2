@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Rent Motor</title>
+
+<style>
+/* ===== VARIABLES ===== */
+:root{
+  --dark:#0f172a;   /* لون الهيدر والفوتر */
+  --blue:#0284c7;   /* لون أزرار وبعض النصوص */
+  --yellow:#fde047; /* لون العناوين المهمة */
+}
+
+/* ===== SMOOTH SCROLL & OFFSET ===== */
+body{
+  scroll-behavior:smooth; /* حركة سلسة عند الضغط على روابط التنقل */
+}
+
+section{
+  scroll-margin-top:90px; /* يترك مساحة فوق كل قسم عند التنقل (بسبب الهيدر الثابت) */
+}
+
+/* ===== RESET & BASE ===== */
+*{
+  margin:0; padding:0; box-sizing:border-box;
+  font-family:Tahoma,Arial; /* خط موحد */
+}
+
+body{
+  background:#f1f5f9; /* لون خلفية الصفحة */
+  color:#1e293b;     /* لون النصوص */
+}
+
+/* ===== HEADER ===== */
+header{
+  background:var(--dark); /* لون خلفية الهيدر */
+  color:#fff;
+  padding:15px 40px;
+  display:flex;           /* ترتيب العناصر بشكل أفقي */
+  justify-content:space-between; /* توزيع المسافات بين العنوان والقائمة */
+  align-items:center;     /* محاذاة رأسية */
+  position:sticky;        /* يبقى ثابت عند التمرير */
+  top:0;
+  z-index:1000;           /* يبقى فوق العناصر الأخرى */
+}
+
+/* روابط التنقل */
+nav a{
+  color:#fff;
+  margin:0 12px;
+  text-decoration:none;
+  font-weight:bold;
+  position:relative; /* لتطبيق الخط السفلي عند التحويم */
+}
+
+/* خط أصفر يظهر عند التحويم على الرابط */
+nav a::after{
+  content:"";
+  position:absolute;
+  width:0; height:2px;
+  background:var(--yellow);
+  bottom:-5px; right:0;
+  transition:.3s;
+}
+nav a:hover::after{ width:100%; }
+
+/* ===== HERO / القسم الترحيبي ===== */
+.hero{
+  height:90vh; /* يغطي تقريبًا كامل الشاشة */
+  background:linear-gradient(135deg,#0284c7,#0ea5e9);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  animation:fadeIn 1.2s ease; /* ظهور تدريجي عند تحميل الصفحة */
+}
+
+.hero h1{
+  font-size:48px;
+  color:var(--yellow);
+  margin-bottom:15px;
+}
+
+.hero p{ font-size:18px; }
+
+/* ===== SECTIONS COMMON ===== */
+section{
+  padding:60px 20px;
+  text-align:center;
+}
+
+/* ===== CAR GRID ===== */
+.car-grid{
+  display:grid; /* استخدام شبكة لعرض السيارات */
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); /* يجعل الشبكة متجاوبة */
+  gap:30px; /* المسافة بين كل سيارة */
+  max-width:1100px;
+  margin:auto;
+}
+
+/* بطاقة السيارة */
+.car{
+  background:white;
+  border-radius:20px;
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
+  overflow:hidden;
+  cursor:pointer;
+  transform-style:preserve-3d;
+  transition:.4s; /* حركة سلسة عند التحويم */
+}
+
+.car:hover{
+  transform:translateY(-10px) rotateX(5deg); /* تأثير ثلاثي الأبعاد عند التحويم */
+}
+
+.car img{
+  width:100%;
+  height:180px;
+  object-fit:cover; /* ملء الصورة بشكل متناسب */
+}
+
+.car h3{ margin:15px 0 5px; }
+.car p{
+  color:var(--blue);
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+/* ===== CONTACT FORM ===== */
+.contact input, .contact textarea{
+  width:320px;
+  max-width:90%; /* متجاوب على الشاشات الصغيرة */
+  padding:12px;
+  margin:10px;
+  border-radius:12px;
+  border:1px solid #ccc;
+}
+
+/* أزرار عامة */
+button{
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  background:var(--blue);
+  color:white;
+  font-size:16px;
+  transition:.3s;
+}
+
+button:hover{
+  transform:scale(1.05); /* تكبير خفيف عند التحويم */
+  background:#0ea5e9; /* تغيير اللون */
+}
+
+/* زر إلغاء في المودال */
+.cancel{
+  background:#fde047;
+  color:black;
+}
+
+/* ===== MODAL / نافذة الحجز ===== */
+.modal{
+  display:none; /* مخفي افتراضيًا */
+  position:fixed;
+  inset:0; /* يغطي الشاشة كاملة */
+  background:rgba(0,0,0,.7);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  width:90%;
+  max-width:400px;
+  animation:zoom .4s ease; /* ظهور تدريجي */
+}
+
+.modal-content input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--dark);
+  color:white;
+  padding:15px;
+  margin-top:40px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes zoom{
+  from{transform:scale(.7);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <h2>RENT MOTOR</h2>
+  <nav>
+    <a href="#home">الرئيسية</a>
+    <a href="#cars">السيارات</a>
+    <a href="#contact">اتصل بنا</a>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <h1>أفضل خدمة تأجير سيارات</h1>
+  <p>واجهة حديثة • حجز سريع • تجربة فخمة</p>
+</section>
+
+<!-- ===== CARS ===== -->
+<section id="cars">
+  <h2>السيارات المتاحة</h2><br>
+  <div class="car-grid">
+    <div class="car" data-name="تويوتا كورولا">
+      <img src="سيارة كورلا.jpg">
+      <h3>تويوتا كورولا</h3>
+      <p>30$ / اليوم</p>
+    </div>
+    <div class="car" data-name="هوندا سيفيك">
+      <img src="هوندا سيفيك.jpg">
+      <h3>هوندا سيفيك</h3>
+      <p>35$ / اليوم</p>
+    </div>
+    <div class="car" data-name="نيسان التيما">
+      <img src="نيسان التيماء.jpg">
+      <h3>نيسان التيما</h3>
+      <p>40$ / اليوم</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="contact">
+  <h2>اتصل بنا</h2><br>
+  <input placeholder="اسمك">
+  <input placeholder="بريدك">
+  <textarea placeholder="رسالتك"></textarea><br>
+  <button onclick="alert('تم الإرسال بنجاح')">إرسال</button>
+</section>
+
+<!-- ===== MODAL ===== -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>حجز سيارة</h3>
+    <input id="carName" readonly>
+    <input placeholder="اسم العميل">
+    <input placeholder="رقم الهاتف">
+    <input type="date"><input type="date">
+    <button onclick="confirm()">تأكيد الحجز</button>
+    <button class="cancel" onclick="closeModal()">إلغاء</button>
+    <p id="msg" style="color:green"></p>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>© 2026 RENT MOTOR</footer>
+
+<script>
+/* ===== MODAL SCRIPT ===== */
+const modal=document.getElementById("modal");   // نافذة الحجز
+const carName=document.getElementById("carName"); // حقل اسم السيارة
+const msg=document.getElementById("msg");       // رسالة نجاح الحجز
+
+// عند الضغط على أي سيارة
+document.querySelectorAll(".car").forEach(car=>{
+  car.onclick=()=>{
+    carName.value=car.dataset.name; // نسخ اسم السيارة للمدخل
+    msg.textContent=""; // مسح أي رسالة قديمة
+    modal.style.display="flex"; // عرض المودال
+  }
+});
+
+// إغلاق المودال
+function closeModal(){ modal.style.display="none"; }
+
+// تأكيد الحجز
+function confirm(){
+  msg.textContent="✅ تم الحجز بنجاح";
+  setTimeout(closeModal,2000); // إغلاق بعد ثانيتين
+}
+
+// إغلاق عند الضغط خارج المودال
+window.onclick=e=> e.target===modal && closeModal();
+</script>
+
+</body>
+</html>
